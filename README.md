@@ -13,12 +13,12 @@ When the same thing happens in another slot, bootloader forces it into fastboot.
 - [x] Find the disk with the flag.
 - [x] Write Slot flag(Active/Bootable/Unbootable) to the disk
 - [x] Read GPT partition entry
-- [ ] Generating CRC32 code for GPT partition entry
+- [x] Generating CRC32 code for GPT partition entry
 - [x] Write the CRC32 code of GPT partition entry to the specified position
 - [x] Read the first 92 bytes of the GPT header
 - [x] Generating CRC32 code of GPT header
 - [x] Write the CRC32 code of GPT header to the specified position
-- [ ] Has the problem been solved?
+- [x] Has the problem been solved?
 
 ## License
 The software is distributed under GPL v3 with additional terms.
