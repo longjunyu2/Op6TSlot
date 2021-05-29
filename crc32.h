@@ -27,7 +27,7 @@
 
 #define GPT_HEADER_SIZE 92
 
-#define GPT_ENTRY_COUNT 4
+#define GPT_ENTRY_COUNT 3
 
 int reflect(int, int);
 
