@@ -36,6 +36,8 @@ EFI_STATUS EFIAPI SlotMain(IN EFI_HANDLE ImageHandle,
     UINT32 mMediaId;
     UINT32 mBlockSize;
     int index;
+	unsigned char currentSlotA[OP6T_SLOT_FLAG_SIZE];
+	unsigned char currentSlotB[OP6T_SLOT_FLAG_SIZE];
         // list all Handles that installed DiskIoProtocol
     status = SystemTable->BootServices->LocateHandleBuffer(ByProtocol, 
                     &gEfiDiskIoProtocolGuid,
@@ -43,7 +45,7 @@ EFI_STATUS EFIAPI SlotMain(IN EFI_HANDLE ImageHandle,
                     &numHandles,
                     &controllerHandles);
     if (EFI_ERROR(status)) {
-        WaitAnyKey(SystemTable);
+        //WaitAnyKey(SystemTable);
         return status;
     }
         // ergodic the handles
@@ -90,12 +92,46 @@ EFI_STATUS EFIAPI SlotMain(IN EFI_HANDLE ImageHandle,
             if (i == 1) 
                 continue;
             SystemTable->ConOut->OutputString(SystemTable->ConOut, L"The name of target partition is matched.\n");
+				// read flag of slot A
+			status = mDiskIoProtocol->ReadDisk(
+						mDiskIoProtocol, 
+						mMediaId, 
+						2 * mBlockSize + OP6T_SLOT_A_BOOT_FLAG_LBA2_OFFSET, 
+						OP6T_SLOT_FLAG_SIZE, 
+						currentSlotA);
+			if (EFI_ERROR(status))
+				return status;
+				// read flag of slot B
+			status = mDiskIoProtocol->ReadDisk(
+						mDiskIoProtocol, 
+						mMediaId, 
+						3 * mBlockSize + OP6T_SLOT_B_BOOT_FLAG_LBA3_OFFSET, 
+						OP6T_SLOT_FLAG_SIZE, 
+						currentSlotB);
+			if (EFI_ERROR(status))
+				return status;
+			
+				// analyze A/B flags
+			int flag_offset = 0;
+			if (currentSlotA[0] == OP6T_SLOT_FLAG_ACTIVE)
+				return EFI_SUCCESS;
+			else if (currentSlotA[0] == OP6T_SLOT_FLAG_UNBOOTABLE)
+				if (currentSlotB[0] == OP6T_SLOT_FLAG_ACTIVE)
+					return EFI_SUCCESS;
+				else if (currentSlotB[0] == OP6T_SLOT_FLAG_UNBOOTABLE)
+					flag_offset = 2 * mBlockSize + OP6T_SLOT_A_BOOT_FLAG_LBA2_OFFSET;
+				else
+					flag_offset = 3 * mBlockSize + OP6T_SLOT_B_BOOT_FLAG_LBA3_OFFSET;
+			else
+				flag_offset = 2 * mBlockSize + OP6T_SLOT_A_BOOT_FLAG_LBA2_OFFSET;
+			
+
                 // write flag into disk
-            unsigned char f[1] = {OP6T_SLOT_FLAG_BOOTABLE};
+            unsigned char f[1] = {OP6T_SLOT_FLAG_ACTIVE};
             status = mDiskIoProtocol->WriteDisk(
                         mDiskIoProtocol, 
                         mMediaId, 
-                        2 * mBlockSize + OP6T_SLOT_A_BOOT_FLAG_LBA2_OFFSET, 
+                        flag_offset, 
                         OP6T_SLOT_FLAG_SIZE, 
                         f);
             if (EFI_ERROR(status)) {

@@ -2,6 +2,7 @@
     INF_VERSION = 0x0010005
     BASE_NAME = Op6tSlotDxe
     MODULE_TYPE = DXE_DRIVER
+    FILE_GUID = ff270133-610c-45b5-3acb-879e91b5d1dd
     VERSION_STRING = 1.0
     ENTRY_POINT = SlotMain
 [Sources]
@@ -17,5 +18,7 @@
 [Protocols]
     gEfiDiskIoProtocolGuid
     gEfiBlockIoProtocolGuid
+[Depex]
+    TRUE
 [BuildOptions]
 #GCC:*_*_*_CC_FLAGS = -Wno-error

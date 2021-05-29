@@ -40,7 +40,7 @@ const unsigned OP6T_SLOT_FLAG_BOOTABLE = 0x37; /* defaultly set bootable the sam
 
 const unsigned OP6T_SLOT_FLAG_UNBOOTABLE = 0xBA;
 
-const unsigned OP6T_SLOT_FLAG_SUCCESSFUL = 0xFF; /* OP6T_SLOT_FLAG_SUCCESSFUL maybe uncorrect in this file */
+// const unsigned OP6T_SLOT_FLAG_SUCCESSFUL = 0xFF; /* OP6T_SLOT_FLAG_SUCCESSFUL maybe uncorrect in this file */
 
 #define OP6T_SLOT_FLAG_SIZE 1
 

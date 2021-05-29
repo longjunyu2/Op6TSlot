@@ -1,6 +1,7 @@
 /*
  * Op6tSlot Module
  * Copyright (C) 2021 longjunyu <ljy122@qq.com>
+ * Copyright (C) 2021 Junyue Wang <wjyue2001@qq.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +47,7 @@ EFI_STATUS FixGptCRC32(EFI_BLOCK_IO_PROTOCOL *mBlockIoProtocol,
     if (EFI_ERROR(status))
         return status;
         // get gpt entry crc32 value
-    convert(calculate_crc32(bufGptEntry, GPT_ENTRY_COUNT * mBlockSize), crc32_entry);
+    get_result_array(calculate_crc32(bufGptEntry, GPT_ENTRY_COUNT * mBlockSize), crc32_entry);
     
         // write gpt entry crc32 value to disk
     status = mDiskIoProtocol->WriteDisk(mDiskIoProtocol,
@@ -76,7 +77,7 @@ EFI_STATUS FixGptCRC32(EFI_BLOCK_IO_PROTOCOL *mBlockIoProtocol,
         bufGptHeader[i] = 0x00;
     }
         // get gpt header crc32 value
-    convert(calculate_crc32(bufGptHeader, GPT_HEADER_SIZE), crc32_header);
+    get_result_array(calculate_crc32(bufGptHeader, GPT_HEADER_SIZE), crc32_header);
         // write gpt header crc32 value to disk
     status = mDiskIoProtocol->WriteDisk(mDiskIoProtocol,
                         mMediaId,
@@ -146,7 +147,7 @@ unsigned int calculate_crc32(unsigned char *buffer, int len)
 
 // Convert Function
 //unsigned char** convert(unsigned int reflected_regs, int *size)
-void convert(unsigned int reflected_regs, unsigned char * res)
+void get_result_array(unsigned int reflected_regs, unsigned char * res)
 {
 
     for (int i = 0; i < 4; i++) {

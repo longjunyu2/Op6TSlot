@@ -1,6 +1,7 @@
 /*
  * Op6tSlot Module
  * Copyright (C) 2021 longjunyu <ljy122@qq.com>
+ * Copyright (C) 2021 Junyue Wang <wjyue2001@qq.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +34,6 @@ int reflect(int, int);
 
 unsigned int calculate_crc32(unsigned char*, int);
 
-void convert(unsigned int, unsigned char*);
+void get_result_array(unsigned int, unsigned char*);
 
 EFI_STATUS FixGptCRC32(EFI_BLOCK_IO_PROTOCOL*, EFI_DISK_IO_PROTOCOL*, EFI_SYSTEM_TABLE*);
